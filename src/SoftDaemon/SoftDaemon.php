@@ -29,13 +29,13 @@ class SoftDaemon
     protected $maxwait;
 
     /** @var int count of consecutive times the executable return error */
-    protected $errorcount;
+    protected $errorcount = 0;
 
     /** @var boolean pause state of the object */
-    protected $pause;
+    protected $pause = false;
 
     /** @var boolean flag to control main loop */
-    protected $mainloop;
+    protected $mainloop = true;
 
     /** @var PcntlSignals Native php functions (isolated for testing) */
     protected $pcntlsignals;
@@ -59,7 +59,6 @@ class SoftDaemon
         $this->setMaxWait($maxwait);
         $this->setMinWait($minwait);
         $this->pcntlsignals = new PcntlSignals($this->signals);
-        $this->initialize();
     }
 
     /**
@@ -162,7 +161,8 @@ class SoftDaemon
     public function run()
     {
         // reset variables
-        $this->initialize();
+        $this->errorcount = 0;
+        $this->mainloop = true;
         // block signals
         $this->pcntlsignals->block();
         // main loop
@@ -213,13 +213,6 @@ class SoftDaemon
             // If this happends then this function is not implementing all the signals
             \trigger_error(__CLASS__ . "::signalHandler($signo) do nothing", E_USER_WARNING);
         }
-    }
-
-    private function initialize()
-    {
-        $this->errorcount = 0;
-        $this->mainloop = true;
-        $this->setPause(false);
     }
 
 }
