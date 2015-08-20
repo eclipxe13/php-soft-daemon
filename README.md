@@ -58,10 +58,10 @@ You can create a sequencer with your own rules. Remember that the number of seco
 Feel free to contribute using common github methods.
 Some work is required, like:
 
-* Include the project in Packagist archive and install instructions
-* Include Code Climate, Code Climate, etc.
-* Create documentation (github wiki?)
-* Create some examples
+- [x] Include the project in Packagist archive and install instructions
+- [ ] Include Code Climate, etc.
+- [ ] Create documentation (github wiki?)
+- [ ] Create some examples
 
 ## License
 

@@ -214,5 +214,4 @@ class SoftDaemon
             \trigger_error(__CLASS__ . "::signalHandler($signo) do nothing", E_USER_WARNING);
         }
     }
-
 }

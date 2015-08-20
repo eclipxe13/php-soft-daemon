@@ -51,5 +51,4 @@ class PcntlSignals
         $siginfo = [];
         return \pcntl_sigtimedwait($this->signals, $siginfo, $seconds);
     }
-
 }

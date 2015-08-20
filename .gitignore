@@ -1,3 +1,4 @@
 /tests/coverage.txt
 /composer.lock
 /vendor/
+/.idea/
