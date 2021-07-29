@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Examples;
+namespace Eclipxe\SoftDaemon\Examples;
 
 use Eclipxe\SoftDaemon\Executable;
 
