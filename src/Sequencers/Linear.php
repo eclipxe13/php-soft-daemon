@@ -1,8 +1,10 @@
 <?php
 
-namespace SoftDaemon\Sequencers;
+declare(strict_types=1);
 
-use SoftDaemon\Sequencer;
+namespace Eclipxe\SoftDaemon\Sequencers;
+
+use Eclipxe\SoftDaemon\Sequencer;
 
 /**
  * Fixed sequencer calculate = count
@@ -10,9 +12,8 @@ use SoftDaemon\Sequencer;
  */
 class Linear implements Sequencer
 {
-    public function calculate($count)
+    public function calculate(int $count): int
     {
         return $count;
     }
-
 }

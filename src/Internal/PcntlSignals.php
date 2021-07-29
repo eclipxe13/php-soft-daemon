@@ -1,6 +1,8 @@
 <?php
 
-namespace SoftDaemon\Internal;
+declare(strict_types=1);
+
+namespace Eclipxe\SoftDaemon\Internal;
 
 /**
  * Wrapper class to pcntl used by SoftDaemon
@@ -10,8 +12,14 @@ namespace SoftDaemon\Internal;
  */
 class PcntlSignals
 {
+    /** @var int[] */
     protected $signals;
 
+    /**
+     * PcntlSignals constructor.
+     *
+     * @param int[] $signals
+     */
     public function __construct(array $signals)
     {
         $this->signals = $signals;
@@ -20,35 +28,35 @@ class PcntlSignals
     /**
      * block signals using pcntl_sigprocmask
      * This is not covered on test because it create a php system call
-     * @codeCoverageIgnore
+     *
      * @return bool
      */
-    public function block()
+    public function block(): bool
     {
-        return \pcntl_sigprocmask(SIG_BLOCK, $this->signals);
+        return pcntl_sigprocmask(SIG_BLOCK, $this->signals); // @codeCoverageIgnore
     }
 
     /**
      * unblock signals using pcntl_sigprocmask
      * This is not covered on test because it create a php system call
-     * @codeCoverageIgnore
+     *
      * @return bool
      */
-    public function unblock()
+    public function unblock(): bool
     {
-        return \pcntl_sigprocmask(SIG_UNBLOCK, $this->signals);
+        return pcntl_sigprocmask(SIG_UNBLOCK, $this->signals); // @codeCoverageIgnore
     }
 
     /**
      * wait for blocked signals using pcntl_sigtimedwait
      * This is not covered on test because it create a php system call
-     * @codeCoverageIgnore
+     *
      * @param int $seconds Numbers of seconds to wait
-     * @return bool
+     * @return int
      */
-    public function wait($seconds)
+    public function wait(int $seconds): int
     {
         $siginfo = [];
-        return \pcntl_sigtimedwait($this->signals, $siginfo, $seconds);
+        return pcntl_sigtimedwait($this->signals, $siginfo, $seconds) ?: 0; // @codeCoverageIgnore
     }
 }
