@@ -1,0 +1,18 @@
+filter:
+  excluded_paths:
+    - 'tests/'
+    - 'vendor/'
+
+build:
+  dependencies:
+    override:
+      - composer upgrade --no-interaction --prefer-dist
+  nodes:
+    analysis: # see https://scrutinizer-ci.com/docs/tools/php/php-scrutinizer/
+      project_setup: { override: true }
+      tests:
+        override:
+          - php-scrutinizer-run --enable-security-analysis
+
+tools:
+  external_code_coverage: true

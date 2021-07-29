@@ -1,9 +1,11 @@
 <?php
 
-namespace SoftDaemon;
+declare(strict_types=1);
 
-use SoftDaemon\Sequencers\Fixed as FixedSequencer;
-use SoftDaemon\Internal\PcntlSignals;
+namespace Eclipxe\SoftDaemon;
+
+use Eclipxe\SoftDaemon\Internal\PcntlSignals;
+use Eclipxe\SoftDaemon\Sequencers\Fixed as FixedSequencer;
 
 /**
  * @package SoftDaemon
@@ -11,10 +13,10 @@ use SoftDaemon\Internal\PcntlSignals;
 class SoftDaemon
 {
     /** maximum wait in seconds (1 hour) */
-    const DEFAULT_MAXWAIT = 3600;
+    public const DEFAULT_MAXWAIT = 3600;
 
     /** minimum wait in seconds (no wait) */
-    const DEFAULT_MINWAIT = 0;
+    public const DEFAULT_MINWAIT = 0;
 
     /** @var Executable **/
     protected $executable;
@@ -31,25 +33,25 @@ class SoftDaemon
     /** @var int count of consecutive times the executable return error */
     protected $errorcount = 0;
 
-    /** @var boolean pause state of the object */
+    /** @var bool pause state of the object */
     protected $pause = false;
 
-    /** @var boolean flag to control main loop */
+    /** @var bool flag to control main loop */
     protected $mainloop = true;
 
     /** @var PcntlSignals Native php functions (isolated for testing) */
     protected $pcntlsignals;
 
-    /** @var array Set of signals to block and wait for */
+    /** @var int[] Set of signals to block and wait for */
     protected $signals = [SIGHUP, SIGTERM, SIGINT, SIGQUIT, SIGUSR1, SIGUSR2];
 
     /**
-     * @param \SoftDaemon\Executable $executable Executable object
-     * @param \SoftDaemon\Sequencer $sequencer Sequencer object If null then a FixedSequencer(1) will be used
+     * @param Executable $executable Executable object
+     * @param Sequencer|null $sequencer Sequencer object If null then a FixedSequencer(1) will be used
      * @param int $maxwait Maximum seconds to wait before call again the executable object (min: 1)
      * @param int $minwait Minimum seconds to wait before call again the executable object (min: 0)
      */
-    public function __construct(Executable $executable, Sequencer $sequencer = null, $maxwait = self::DEFAULT_MAXWAIT, $minwait = self::DEFAULT_MINWAIT)
+    public function __construct(Executable $executable, Sequencer $sequencer = null, int $maxwait = self::DEFAULT_MAXWAIT, int $minwait = self::DEFAULT_MINWAIT)
     {
         $this->executable = $executable;
         if (null === $sequencer) {
@@ -64,18 +66,19 @@ class SoftDaemon
     /**
      * Set the maxwait seconds, the SoftDaemon will not wait more than this quantity of seconds
      * Any value lower than 1 is fixed to 1, if not numeric uses default self::DEFAULT_MAXWAIT
+     *
      * @param int $maxwait
      */
-    public function setMaxWait($maxwait)
+    public function setMaxWait(int $maxwait): void
     {
-        $this->maxwait = max(1, is_numeric($maxwait) ? (int) $maxwait : self::DEFAULT_MAXWAIT);
+        $this->maxwait = max(1, $maxwait);
     }
 
     /**
      * Get the maxwait seconds
      * @return int
      */
-    public function getMaxWait()
+    public function getMaxWait(): int
     {
         return $this->maxwait;
     }
@@ -83,18 +86,19 @@ class SoftDaemon
     /**
      * Set the minwait seconds, the SoftDaemon will not wait less than this quantity of seconds
      * Any value lower than 0 is fixed to 0, if not numeric uses default 0
+     *
      * @param int $minwait
      */
-    public function setMinWait($minwait)
+    public function setMinWait(int $minwait): void
     {
-        $this->minwait = max(0, is_numeric($minwait) ? (int) $minwait : self::DEFAULT_MINWAIT);
+        $this->minwait = max(0, $minwait);
     }
 
     /**
      * Get the minwait seconds
-     * @param int $minwait
+     * @return int $minwait
      */
-    public function getMinWait()
+    public function getMinWait(): int
     {
         return $this->minwait;
     }
@@ -102,7 +106,7 @@ class SoftDaemon
     /**
      * Reset the error counter to zero
      */
-    public function resetErrorCounter()
+    public function resetErrorCounter(): void
     {
         $this->errorcount = 0;
     }
@@ -110,7 +114,7 @@ class SoftDaemon
     /**
      * Will exit the main loop on the next iteration
      */
-    public function terminate()
+    public function terminate(): void
     {
         $this->mainloop = false;
     }
@@ -120,7 +124,7 @@ class SoftDaemon
      * This value can only be set to zero using resetErrorCounter
      * @return int
      */
-    public function getErrorCounter()
+    public function getErrorCounter(): int
     {
         return $this->errorcount;
     }
@@ -129,28 +133,30 @@ class SoftDaemon
      * Set the pause status, if on pause then main loop will only waiting 1 second until another signal is received
      * The executor is not call when the SoftDaemon is on pause
      * The time to wait on pause is 1 second, but this is fixed to minwait and maxwait
+     *
      * @param bool $pause
      */
-    public function setPause($pause)
+    public function setPause(bool $pause): void
     {
-        $this->pause = (bool) $pause;
+        $this->pause = $pause;
     }
 
     /**
      * Get the pause status
      * @return bool
      */
-    public function getPause()
+    public function getPause(): bool
     {
         return $this->pause;
     }
 
     /**
      * Fix the wait time to force minwait and maxwait
+     *
      * @param int $seconds
      * @return int
      */
-    protected function waitTime($seconds)
+    protected function waitTime(int $seconds): int
     {
         return max($this->minwait, min($this->maxwait, $seconds));
     }
@@ -158,7 +164,7 @@ class SoftDaemon
     /**
      * Run the executor expecting signals
      */
-    public function run()
+    public function run(): void
     {
         // reset variables
         $this->errorcount = 0;
@@ -174,7 +180,11 @@ class SoftDaemon
                 // get the process result
                 $result = $this->executable->runOnce();
                 // increase the error count based on result
-                $this->errorcount = ($result) ? 0 : $this->errorcount + 1;
+                if ($result) {
+                    $this->errorcount = 0;
+                } else {
+                    $this->errorcount = $this->errorcount + 1;
+                }
                 // calculate time to wait
                 $timetowait = $this->waitTime($this->sequencer->calculate($this->errorcount));
             }
@@ -195,23 +205,23 @@ class SoftDaemon
      *
      * @param int $signo
      */
-    protected function signalHandler($signo)
+    protected function signalHandler(int $signo): void
     {
         // send the signal handler to the executable
         $this->executable->signalHandler($signo);
         // process signals
-        if ($signo === SIGUSR1) { // pause
+        if (SIGUSR1 === $signo) { // pause
             $this->setPause(true);
-        } elseif ($signo === SIGUSR2) { // unpause
+        } elseif (SIGUSR2 === $signo) { // unpause
             $this->setPause(false);
-        } elseif ($signo === SIGHUP) { // reset error counter
+        } elseif (SIGHUP === $signo) { // reset error counter
             $this->resetErrorCounter();
-        } elseif ($signo === SIGTERM || $signo === SIGINT || $signo === SIGQUIT) {  // terminate
+        } elseif (SIGTERM === $signo || SIGINT === $signo || SIGQUIT === $signo) {  // terminate
             $this->terminate();
         } else {
             // If the signal is not handled create a E_USER_WARNING
             // If this happends then this function is not implementing all the signals
-            \trigger_error(__CLASS__ . "::signalHandler($signo) do nothing", E_USER_WARNING);
+            trigger_error(__CLASS__ . "::signalHandler($signo) do nothing", E_USER_WARNING);
         }
     }
 }

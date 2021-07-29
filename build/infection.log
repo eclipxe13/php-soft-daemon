@@ -1,0 +1,190 @@
+Escaped mutants:
+================
+
+1) /home/eclipxe/work/github/php-soft-daemon/src/SoftDaemon.php:117    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+     /**
+      * Will exit the main loop on the next iteration
+      */
+-    public function terminate() : void
++    protected function terminate() : void
+     {
+         $this->mainloop = false;
+     }
+
+
+2) /home/eclipxe/work/github/php-soft-daemon/src/SoftDaemon.php:170    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function run() : void
+     {
+         // reset variables
+-        $this->errorcount = 0;
++        $this->errorcount = -1;
+         $this->mainloop = true;
+         // block signals
+         $this->pcntlsignals->block();
+
+
+3) /home/eclipxe/work/github/php-soft-daemon/src/SoftDaemon.php:186    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+                 if ($result) {
+                     $this->errorcount = 0;
+                 } else {
+-                    $this->errorcount = $this->errorcount + 1;
++                    $this->errorcount = $this->errorcount + 0;
+                 }
+                 // calculate time to wait
+                 $timetowait = $this->waitTime($this->sequencer->calculate($this->errorcount));
+
+
+4) /home/eclipxe/work/github/php-soft-daemon/src/SoftDaemon.php:186    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+                 if ($result) {
+                     $this->errorcount = 0;
+                 } else {
+-                    $this->errorcount = $this->errorcount + 1;
++                    $this->errorcount = $this->errorcount + 2;
+                 }
+                 // calculate time to wait
+                 $timetowait = $this->waitTime($this->sequencer->calculate($this->errorcount));
+
+
+5) /home/eclipxe/work/github/php-soft-daemon/src/SoftDaemon.php:186    [M] Plus
+
+--- Original
++++ New
+@@ @@
+                 if ($result) {
+                     $this->errorcount = 0;
+                 } else {
+-                    $this->errorcount = $this->errorcount + 1;
++                    $this->errorcount = $this->errorcount - 1;
+                 }
+                 // calculate time to wait
+                 $timetowait = $this->waitTime($this->sequencer->calculate($this->errorcount));
+
+
+Timed Out mutants:
+==================
+
+Skipped mutants:
+================
+
+Not Covered mutants:
+====================
+
+1) /home/eclipxe/work/github/php-soft-daemon/src/Internal/PcntlSignals.php:34    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+      *
+      * @return bool
+      */
+-    public function block() : bool
++    protected function block() : bool
+     {
+         return pcntl_sigprocmask(SIG_BLOCK, $this->signals);
+         // @codeCoverageIgnore
+
+
+2) /home/eclipxe/work/github/php-soft-daemon/src/Internal/PcntlSignals.php:45    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+      *
+      * @return bool
+      */
+-    public function unblock() : bool
++    protected function unblock() : bool
+     {
+         return pcntl_sigprocmask(SIG_UNBLOCK, $this->signals);
+         // @codeCoverageIgnore
+
+
+3) /home/eclipxe/work/github/php-soft-daemon/src/Internal/PcntlSignals.php:57    [M] PublicVisibility
+
+--- Original
++++ New
+@@ @@
+      * @param int $seconds Numbers of seconds to wait
+      * @return int
+      */
+-    public function wait(int $seconds) : int
++    protected function wait(int $seconds) : int
+     {
+         $siginfo = [];
+         return pcntl_sigtimedwait($this->signals, $siginfo, $seconds) ?: 0;
+
+
+4) /home/eclipxe/work/github/php-soft-daemon/src/Internal/PcntlSignals.php:60    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function wait(int $seconds) : int
+     {
+         $siginfo = [];
+-        return pcntl_sigtimedwait($this->signals, $siginfo, $seconds) ?: 0;
++        return pcntl_sigtimedwait($this->signals, $siginfo, $seconds) ?: -1;
+         // @codeCoverageIgnore
+     }
+ }
+
+
+5) /home/eclipxe/work/github/php-soft-daemon/src/Internal/PcntlSignals.php:60    [M] IncrementInteger
+
+--- Original
++++ New
+@@ @@
+     public function wait(int $seconds) : int
+     {
+         $siginfo = [];
+-        return pcntl_sigtimedwait($this->signals, $siginfo, $seconds) ?: 0;
++        return pcntl_sigtimedwait($this->signals, $siginfo, $seconds) ?: 1;
+         // @codeCoverageIgnore
+     }
+ }
+
+
+6) /home/eclipxe/work/github/php-soft-daemon/src/Internal/PcntlSignals.php:60    [M] Ternary
+
+--- Original
++++ New
+@@ @@
+     public function wait(int $seconds) : int
+     {
+         $siginfo = [];
+-        return pcntl_sigtimedwait($this->signals, $siginfo, $seconds) ?: 0;
++        return pcntl_sigtimedwait($this->signals, $siginfo, $seconds) ? 0 : pcntl_sigtimedwait($this->signals, $siginfo, $seconds);
+         // @codeCoverageIgnore
+     }
+ }
+
+
+7) /home/eclipxe/work/github/php-soft-daemon/src/SoftDaemon.php:184    [M] DecrementInteger
+
+--- Original
++++ New
+@@ @@
+                 $result = $this->executable->runOnce();
+                 // increase the error count based on result
+                 if ($result) {
+-                    $this->errorcount = 0;
++                    $this->errorcount = -1;
+                 } else {
+                     $this->errorcount = $this->errorcount + 1;
+                 }

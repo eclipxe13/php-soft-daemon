@@ -1,18 +1,20 @@
 <?php
 
-namespace SoftDaemonTests;
+declare(strict_types=1);
 
-use SoftDaemon\SoftDaemon;
+namespace Eclipxe\SoftDaemon\Tests\Unit;
 
-class SoftDaemonTest extends \PHPUnit_Framework_TestCase
+use Eclipxe\SoftDaemon\SoftDaemon;
+use PHPUnit\Framework\TestCase;
+
+class SoftDaemonTest extends TestCase
 {
-
-    public function createMockExecutable()
+    public function createMockExecutable(): MockExecutable
     {
         return new MockExecutable();
     }
 
-    public function testDefaultConstructor()
+    public function testDefaultConstructor(): void
     {
         $sd = new SoftDaemon($this->createMockExecutable());
         $this->assertSame(SoftDaemon::DEFAULT_MAXWAIT, $sd->getMaxWait(), 'default maxwait must be the same as constant');
@@ -21,7 +23,7 @@ class SoftDaemonTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(0, $sd->getErrorCounter(), 'Must be no errors on SoftDaemon creation');
     }
 
-    public function testPause()
+    public function testPause(): void
     {
         $sd = new SoftDaemon($this->createMockExecutable());
         $sd->setPause(false);
@@ -32,35 +34,25 @@ class SoftDaemonTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($sd->getPause(), 'Pause must be false after setting that value (2 round)');
     }
 
-    public function testMaxWait()
+    public function testMaxWait(): void
     {
         $sd = new SoftDaemon($this->createMockExecutable());
         $sd->setMaxWait(100);
         $this->assertSame(100, $sd->getMaxWait(), 'MaxWait was not get correct with a valid number');
         $sd->setMaxWait(-5);
         $this->assertSame(1, $sd->getMaxWait(), 'MaxWait was not set to 1 with a negative number');
-        $invalid = ['not a number', null, new \stdClass()];
-        foreach($invalid as $number) {
-            $sd->setMaxWait($number);
-            $this->assertSame(SoftDaemon::DEFAULT_MAXWAIT, $sd->getMaxWait(), "MaxWait was not get as 1 with an invalid number");
-        }
     }
 
-    public function testMinWait()
+    public function testMinWait(): void
     {
         $sd = new SoftDaemon($this->createMockExecutable());
         $sd->setMinWait(10);
         $this->assertSame(10, $sd->getMinWait(), 'MinWait was not get correct with a valid number');
         $sd->setMinWait(-5);
         $this->assertSame(0, $sd->getMinWait(), 'MinWait was not set to 1 with a negative number');
-        $invalid = ['not a number', null, new \stdClass()];
-        foreach($invalid as $number) {
-            $sd->setMinWait($number);
-            $this->assertSame(SoftDaemon::DEFAULT_MINWAIT, $sd->getMinWait(), "MaxWait was not get as 1 with an invalid number");
-        }
     }
 
-    public function testWaitTime()
+    public function testWaitTime(): void
     {
         $sd = new MockSoftDaemon($this->createMockExecutable());
         $sd->setMinWait(10);
@@ -70,7 +62,7 @@ class SoftDaemonTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(50, $sd->exposeWaitTime(50), 'wait time is not value between minwait and maxwait');
     }
 
-    public function testgetErrorCounter()
+    public function testgetErrorCounter(): void
     {
         $sd = new MockSoftDaemon($this->createMockExecutable());
         $sd->setErrorCounter(10);
@@ -79,7 +71,7 @@ class SoftDaemonTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(0, $sd->getErrorCounter(), 'Error counter was not zero after reset error counter');
     }
 
-    public function testSignalHandler()
+    public function testSignalHandler(): void
     {
         $executable = $this->createMockExecutable();
         $sd = new MockSoftDaemon($executable);
@@ -105,24 +97,22 @@ class SoftDaemonTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(['Signal 3 received', 'Terminate called'], $sd->messages, 'Do not detect terminate call after SIGQUIT');
     }
 
-    /**
-     * @expectedException \PHPUnit_Framework_Error_Warning
-     * @expectedExceptionMessage SoftDaemon\SoftDaemon::signalHandler(-128) do nothing
-     */
-    public function testSignalHandlerBadSignal()
+    public function testSignalHandlerBadSignal(): void
     {
         $sd = new MockSoftDaemon($this->createMockExecutable());
+        $this->expectWarning();
+        $this->expectWarningMessage('Eclipxe\SoftDaemon\SoftDaemon::signalHandler(-128) do nothing');
         $sd->exposeSignalHandler(-128);
     }
 
-    public function testRun()
+    public function testRun(): void
     {
         $msg_sd = [
             'Signal 1 received',
             'Signal 10 received',
             'Signal 12 received',
             'Signal 15 received',
-            'Terminate called'
+            'Terminate called',
         ];
         $msg_ex = [
             'Run 1',
@@ -151,10 +141,11 @@ class SoftDaemonTest extends \PHPUnit_Framework_TestCase
         ];
         $executable = $this->createMockExecutable();
         $sd = new MockSoftDaemon($executable);
+        /** @var MockPcntlSignals $pcntlSignals */
+        $pcntlSignals = $sd->exposePcntlSignals();
         $sd->run();
         $this->assertEquals($msg_sd, $sd->messages, 'Execution messages at SoftDaemon does not match');
         $this->assertEquals($msg_ex, $executable->messages, 'Execution messages at Executable does not match');
-        $this->assertEquals($msg_pc, $sd->exposePcntlSignals()->messages, 'Execution messages at PcntlSignals does not match');
+        $this->assertEquals($msg_pc, $pcntlSignals->messages, 'Execution messages at PcntlSignals does not match');
     }
-
 }
