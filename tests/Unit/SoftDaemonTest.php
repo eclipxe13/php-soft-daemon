@@ -62,13 +62,49 @@ class SoftDaemonTest extends TestCase
         $this->assertSame(50, $sd->exposeWaitTime(50), 'wait time is not value between minwait and maxwait');
     }
 
-    public function testgetErrorCounter(): void
+    public function testGetErrorCounter(): void
     {
         $sd = new MockSoftDaemon($this->createMockExecutable());
         $sd->setErrorCounter(10);
         $this->assertSame(10, $sd->getErrorCounter(), 'Mocked error counter does not return fixed value');
         $sd->resetErrorCounter();
         $this->assertSame(0, $sd->getErrorCounter(), 'Error counter was not zero after reset error counter');
+    }
+
+    public function testErrorCounterAfterRun(): void
+    {
+        // prepare to run 8 times
+        $pcntlSignals = new MockPcntlSignals([SIGTERM]);
+        $pcntlSignals->returnSignals = [SIGTERM, 0, 0, 0, SIGTERM, 0, 0, SIGTERM];
+        $executable = $this->createMockExecutable();
+        $executable->runValues = [
+            false, // error count will be 1 [SIGTERM]
+            true,  // error count will be reset to 0
+            false, // error count will be 1
+            false, // error count will be 2
+            false, // error count will be 3 [SIGTERM]
+            true,  // error count will be reset to 0
+            false, // error count will be 1
+            false, // error count will be 2 [SIGTERM]
+        ];
+
+        $sd = new MockSoftDaemon($executable);
+        $sd->setPcntlSignals($pcntlSignals);
+
+        // define error counter state before first run
+        $sd->setErrorCounter(10);
+
+        // first run fail, this is why run reset to 0 when start
+        $sd->run();
+        $this->assertSame(1, $sd->getErrorCounter());
+
+        // check that run reset counter
+        $sd->run();
+        $this->assertSame(3, $sd->getErrorCounter());
+
+        // check that run reset counter (again)
+        $sd->run();
+        $this->assertSame(2, $sd->getErrorCounter());
     }
 
     public function testSignalHandler(): void
@@ -115,16 +151,16 @@ class SoftDaemonTest extends TestCase
             'Terminate called',
         ];
         $msg_ex = [
-            'Run 1',
-            'Run 2',
-            'Run 3',
-            'Run 4',
+            'Run 1 will return false',
+            'Run 2 will return false',
+            'Run 3 will return false',
+            'Run 4 will return false',
             'Executable signal 1 on 4',
-            'Run 5',
-            'Run 6',
+            'Run 5 will return false',
+            'Run 6 will return false',
             'Executable signal 10 on 6',
             'Executable signal 12 on 6',
-            'Run 7',
+            'Run 7 will return false',
             'Executable signal 15 on 7',
         ];
         $msg_pc = [

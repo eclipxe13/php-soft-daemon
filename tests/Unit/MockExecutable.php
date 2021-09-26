@@ -14,6 +14,9 @@ class MockExecutable implements Executable
     /** @var int */
     public $time = 0;
 
+    /** @var bool[] */
+    public $runValues = [];
+
     public function addMessage(string $message): void
     {
         $this->messages[] = $message;
@@ -22,8 +25,9 @@ class MockExecutable implements Executable
     public function runOnce(): bool
     {
         $this->time = $this->time + 1;
-        $this->addMessage("Run $this->time");
-        return false;
+        $return = $this->runValues[$this->time - 1] ?? false;
+        $this->addMessage(sprintf('Run %d will return %s', $this->time, $return ? 'true' : 'false'));
+        return $return;
     }
 
     public function signalHandler(int $signo): void
