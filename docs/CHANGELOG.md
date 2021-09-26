@@ -10,6 +10,15 @@ In summary, [SemVer](https://semver.org/) can be viewed as `[ Breaking ].[ Featu
 
 **Version `0.x.x` doesn't have to apply any of the SemVer rules**
 
+## Unreleased 2021-09-26
+
+Development changes:
+
+- Improve code coverage.
+- Run CI on PHP 8.0.
+- Move code coverage creation to Scrutinizer.
+- Build directory should be empty.
+
 ## Version 2.0.0
 
 Project refactory. Main changes:
