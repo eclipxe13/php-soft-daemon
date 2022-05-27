@@ -13,9 +13,10 @@ use Eclipxe\SoftDaemon\SoftDaemon;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$sequencer = new LinearSequencer();
 $executable = new ExampleExecutable([true, true, false, false, false, true, true, true, true]);
-$sd = new SoftDaemon($executable, $sequencer, 20);
+$sequencer = new LinearSequencer();
+$maxWait = 20;
+$sd = new SoftDaemon($executable, $sequencer, $maxWait);
 $sd->run();
 
 /* OUTPUT:

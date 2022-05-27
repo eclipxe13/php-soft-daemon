@@ -10,6 +10,15 @@ In summary, [SemVer](https://semver.org/) can be viewed as `[ Breaking ].[ Featu
 
 **Version `0.x.x` doesn't have to apply any of the SemVer rules**
 
+## Unreleased 2022-05-27
+
+This is a maintenance update. There are no changes to source code.
+
+- Fix PSalm configuration: use attribute `errorLevel` instead of `totallyTyped`.
+- Update license year to 2022.
+- Move development tools management from `develop/install-development-tools` to `phive`.
+- Update code style to PSR-12.
+
 ## Unreleased 2021-09-26
 
 Development changes:

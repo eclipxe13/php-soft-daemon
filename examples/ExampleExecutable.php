@@ -8,10 +8,13 @@ use Eclipxe\SoftDaemon\Executable;
 
 class ExampleExecutable implements Executable
 {
+    /** @var int */
     protected $counter = 0;
 
+    /** @var array<int, bool> */
     protected $returns;
 
+    /** @param array<int, bool> $returns */
     public function __construct(array $returns)
     {
         $this->returns = $returns;

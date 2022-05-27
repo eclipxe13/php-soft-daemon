@@ -1,6 +1,7 @@
 # eclipxe/php-soft-daemon
 
 [![Source Code][badge-source]][source]
+[![Packagist PHP Version Support][badge-php-version]][php-version]
 [![Latest Version][badge-release]][release]
 [![Software License][badge-license]][license]
 [![Build Status][badge-build]][build]
@@ -76,7 +77,7 @@ as they must only exist inside this project. Do not use them in your project.
 ## Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING][] for details
-and don't forget to take a look in the [TODO][] and [CHANGELOG][] files.
+and don't forget to take a look the [TODO][] and [CHANGELOG][] files.
 
 ## Copyright and License
 
@@ -88,6 +89,7 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 [todo]: https://github.com/eclipxe13/php-soft-daemon/blob/main/docs/TODO.md
 
 [source]: https://github.com/eclipxe13/php-soft-daemon
+[php-version]: https://packagist.org/packages/eclipxe13/php-soft-daemon
 [release]: https://github.com/eclipxe13/php-soft-daemon/releases
 [license]: https://github.com/eclipxe13/php-soft-daemon/blob/main/LICENSE
 [build]: https://github.com/eclipxe13/php-soft-daemon/actions/workflows/build.yml?query=branch:main
@@ -96,6 +98,7 @@ and licensed for use under the MIT License (MIT). Please see [LICENSE][] for mor
 [downloads]: https://packagist.org/packages/eclipxe/php-soft-daemon
 
 [badge-source]: https://img.shields.io/badge/source-eclipxe/php--soft--daemon-blue?style=flat-square
+[badge-php-version]: https://img.shields.io/packagist/php-v/eclipxe/php-soft-daemon?style=flat-square
 [badge-release]: https://img.shields.io/github/release/eclipxe13/php-soft-daemon?style=flat-square
 [badge-license]: https://img.shields.io/github/license/eclipxe13/php-soft-daemon?style=flat-square
 [badge-build]: https://img.shields.io/github/workflow/status/eclipxe13/php-soft-daemon/build/main?style=flat-square

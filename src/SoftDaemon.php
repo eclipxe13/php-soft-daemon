@@ -130,7 +130,7 @@ class SoftDaemon
     }
 
     /**
-     * Set the pause status, if on pause then main loop will only waiting 1 second until another signal is received
+     * Set the pause status, if on pause then main loop will only wait 1 second until another signal is received
      * The executor is not call when the SoftDaemon is on pause
      * The time to wait on pause is 1 second, but this is fixed to minwait and maxwait
      *
@@ -219,7 +219,7 @@ class SoftDaemon
         } elseif (SIGTERM === $signo || SIGINT === $signo || SIGQUIT === $signo) {  // terminate
             $this->terminate();
         } else {
-            // If the signal is not handled create a E_USER_WARNING
+            // If the signal is not handled create an E_USER_WARNING
             // If this happends then this function is not implementing all the signals
             trigger_error(__CLASS__ . "::signalHandler($signo) do nothing", E_USER_WARNING);
         }
