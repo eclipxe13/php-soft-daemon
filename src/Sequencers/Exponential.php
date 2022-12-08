@@ -8,7 +8,6 @@ use Eclipxe\SoftDaemon\Sequencer;
 
 /**
  * Exponential sequencer calculate = count ^ exp
- * @package SoftDaemon
  */
 class Exponential implements Sequencer
 {

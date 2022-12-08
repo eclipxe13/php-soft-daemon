@@ -57,6 +57,13 @@ class MockSoftDaemon extends SoftDaemon
         parent::terminate();
     }
 
+    protected function continueOnMainLoop(): bool
+    {
+        $continue = parent::continueOnMainLoop();
+        $this->addMessage(sprintf('Check if must continue on main loop (%s)', $continue ? 'yes' : 'no'));
+        return $continue;
+    }
+
     public function exposePcntlSignals(): PcntlSignals
     {
         return $this->pcntlsignals;

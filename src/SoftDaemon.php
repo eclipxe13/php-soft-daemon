@@ -7,9 +7,6 @@ namespace Eclipxe\SoftDaemon;
 use Eclipxe\SoftDaemon\Internal\PcntlSignals;
 use Eclipxe\SoftDaemon\Sequencers\Fixed as FixedSequencer;
 
-/**
- * @package SoftDaemon
- */
 class SoftDaemon
 {
     /** maximum wait in seconds (1 hour) */
@@ -37,7 +34,7 @@ class SoftDaemon
     protected $pause = false;
 
     /** @var bool flag to control main loop */
-    protected $mainloop = true;
+    protected $mainloop = false;
 
     /** @var PcntlSignals Native php functions (isolated for testing) */
     protected $pcntlsignals;
@@ -120,6 +117,14 @@ class SoftDaemon
     }
 
     /**
+     * Internally check if must continue on main loop
+     */
+    protected function continueOnMainLoop(): bool
+    {
+        return $this->mainloop;
+    }
+
+    /**
      * Count of consecutive times the executable return error
      * This value can only be set to zero using resetErrorCounter
      * @return int
@@ -131,7 +136,7 @@ class SoftDaemon
 
     /**
      * Set the pause status, if on pause then main loop will only wait 1 second until another signal is received
-     * The executor is not call when the SoftDaemon is on pause
+     * The executor is not called when the SoftDaemon is on pause
      * The time to wait on pause is 1 second, but this is fixed to minwait and maxwait
      *
      * @param bool $pause
@@ -172,7 +177,7 @@ class SoftDaemon
         // block signals
         $this->pcntlsignals->block();
         // main loop
-        while ($this->mainloop) {
+        while ($this->continueOnMainLoop()) {
             // get the time to wait based on pause or sequencer
             if ($this->getPause()) {
                 $timetowait = $this->waitTime(1);
