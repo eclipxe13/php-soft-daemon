@@ -10,7 +10,26 @@ In summary, [SemVer](https://semver.org/) can be viewed as `[ Breaking ].[ Featu
 
 **Version `0.x.x` doesn't have to apply any of the SemVer rules**
 
-## Unreleased 2022-05-27
+## Version 2.0.1
+
+Extract `SoftDaemon::mainloop` read to a protected method `SoftDaemon::continueOnMainLoop()`.
+This change fix the issue detected by `psalm:^5.x`.
+
+Minor changes:
+
+- Upgrade `psalm` version from `4.x` to `5.x`.
+- Update development tools.
+- Update code standard.
+- Remove `@package` annotations.
+- Update GH Workflow:
+  - Replace deprecated `echo ::set-output` instruction.
+  - Add PHP 8.2 to compatibility matrix.
+  - Remove `composer` where it is not required.
+Set up `filter.dependency_paths` setting Scrutinizer-CI.
+
+The following are changes made previously but not released.
+
+### Unreleased 2022-05-27
 
 This is a maintenance update. There are no changes to source code.
 
@@ -19,7 +38,7 @@ This is a maintenance update. There are no changes to source code.
 - Move development tools management from `develop/install-development-tools` to `phive`.
 - Update code style to PSR-12.
 
-## Unreleased 2021-09-26
+### Unreleased 2021-09-26
 
 Development changes:
 
