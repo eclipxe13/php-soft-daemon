@@ -8,6 +8,7 @@ namespace Eclipxe\SoftDaemon\Internal;
  * Wrapper class to pcntl used by SoftDaemon
  * Do not put any logic on this class, it is only used to make system calls
  * @internal
+ * @codeCoverageIgnore
  */
 class PcntlSignals
 {
@@ -32,7 +33,7 @@ class PcntlSignals
      */
     public function block(): bool
     {
-        return pcntl_sigprocmask(SIG_BLOCK, $this->signals); // @codeCoverageIgnore
+        return pcntl_sigprocmask(SIG_BLOCK, $this->signals);
     }
 
     /**
@@ -43,7 +44,7 @@ class PcntlSignals
      */
     public function unblock(): bool
     {
-        return pcntl_sigprocmask(SIG_UNBLOCK, $this->signals); // @codeCoverageIgnore
+        return pcntl_sigprocmask(SIG_UNBLOCK, $this->signals);
     }
 
     /**
@@ -56,6 +57,6 @@ class PcntlSignals
     public function wait(int $seconds): int
     {
         $siginfo = [];
-        return pcntl_sigtimedwait($this->signals, $siginfo, $seconds) ?: 0; // @codeCoverageIgnore
+        return pcntl_sigtimedwait($this->signals, $siginfo, $seconds) ?: 0;
     }
 }
