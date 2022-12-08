@@ -144,11 +144,20 @@ class SoftDaemonTest extends TestCase
     public function testRun(): void
     {
         $msg_sd = [
+            'Check if must continue on main loop (yes)',
+            'Check if must continue on main loop (yes)',
+            'Check if must continue on main loop (yes)',
+            'Check if must continue on main loop (yes)',
             'Signal 1 received',
+            'Check if must continue on main loop (yes)',
+            'Check if must continue on main loop (yes)',
             'Signal 10 received',
+            'Check if must continue on main loop (yes)',
             'Signal 12 received',
+            'Check if must continue on main loop (yes)',
             'Signal 15 received',
             'Terminate called',
+            'Check if must continue on main loop (no)',
         ];
         $msg_ex = [
             'Run 1 will return false',

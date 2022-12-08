@@ -37,7 +37,7 @@ class SoftDaemon
     protected $pause = false;
 
     /** @var bool flag to control main loop */
-    protected $mainloop = true;
+    protected $mainloop = false;
 
     /** @var PcntlSignals Native php functions (isolated for testing) */
     protected $pcntlsignals;
@@ -120,6 +120,14 @@ class SoftDaemon
     }
 
     /**
+     * Internally check if must continue on main loop
+     */
+    protected function continueOnMainLoop(): bool
+    {
+        return $this->mainloop;
+    }
+
+    /**
      * Count of consecutive times the executable return error
      * This value can only be set to zero using resetErrorCounter
      * @return int
@@ -172,7 +180,7 @@ class SoftDaemon
         // block signals
         $this->pcntlsignals->block();
         // main loop
-        while ($this->mainloop) {
+        while ($this->continueOnMainLoop()) {
             // get the time to wait based on pause or sequencer
             if ($this->getPause()) {
                 $timetowait = $this->waitTime(1);
