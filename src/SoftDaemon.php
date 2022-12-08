@@ -7,9 +7,6 @@ namespace Eclipxe\SoftDaemon;
 use Eclipxe\SoftDaemon\Internal\PcntlSignals;
 use Eclipxe\SoftDaemon\Sequencers\Fixed as FixedSequencer;
 
-/**
- * @package SoftDaemon
- */
 class SoftDaemon
 {
     /** maximum wait in seconds (1 hour) */
@@ -139,7 +136,7 @@ class SoftDaemon
 
     /**
      * Set the pause status, if on pause then main loop will only wait 1 second until another signal is received
-     * The executor is not call when the SoftDaemon is on pause
+     * The executor is not called when the SoftDaemon is on pause
      * The time to wait on pause is 1 second, but this is fixed to minwait and maxwait
      *
      * @param bool $pause

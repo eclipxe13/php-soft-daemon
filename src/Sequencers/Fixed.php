@@ -8,7 +8,6 @@ use Eclipxe\SoftDaemon\Sequencer;
 
 /**
  * Fixed sequencer calculate = fixed value
- * @package SoftDaemon
  */
 class Fixed implements Sequencer
 {

@@ -8,7 +8,6 @@ use Eclipxe\SoftDaemon\Sequencer;
 
 /**
  * Fixed sequencer calculate = count
- * @package SoftDaemon
  */
 class Linear implements Sequencer
 {
