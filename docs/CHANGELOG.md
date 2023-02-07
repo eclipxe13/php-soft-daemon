@@ -17,6 +17,7 @@ In summary, [SemVer](https://semver.org/) can be viewed as `[ Breaking ].[ Featu
 - Use PHP8.2 on GitHub workflows.
 - Update license year. Happy 2023!
 - Update development tools.
+- Fix build badge on `README.md`.
 
 ## Version 2.0.1
 
