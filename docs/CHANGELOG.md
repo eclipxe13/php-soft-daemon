@@ -16,6 +16,7 @@ In summary, [SemVer](https://semver.org/) can be viewed as `[ Breaking ].[ Featu
 - Remove `/tests/_files` from GitHub language analysis.
 - Use PHP8.2 on GitHub workflows.
 - Update license year. Happy 2023!
+- Update development tools.
 
 ## Version 2.0.1
 
