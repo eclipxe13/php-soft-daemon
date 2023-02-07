@@ -14,6 +14,7 @@ In summary, [SemVer](https://semver.org/) can be viewed as `[ Breaking ].[ Featu
 
 - Refactor test because method `expectWarning()` has been deprecated.
 - Remove `/tests/_files` from GitHub language analysis.
+- Use PHP8.2 on GitHub workflows.
 
 ## Version 2.0.1
 
