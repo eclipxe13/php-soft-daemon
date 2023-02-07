@@ -141,8 +141,8 @@ class SoftDaemonTest extends TestCase
         @$sd->exposeSignalHandler(-128);
         $error = error_get_last();
 
-        $this->assertSame(E_USER_WARNING, $error['type']);
-        $this->assertSame('Eclipxe\SoftDaemon\SoftDaemon::signalHandler(-128) do nothing', $error['message']);
+        $this->assertSame(E_USER_WARNING, intval($error['type'] ?? 0));
+        $this->assertSame('Eclipxe\SoftDaemon\SoftDaemon::signalHandler(-128) do nothing', strval($error['message'] ?? ''));
     }
 
     public function testRun(): void
