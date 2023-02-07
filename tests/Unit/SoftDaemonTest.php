@@ -136,9 +136,13 @@ class SoftDaemonTest extends TestCase
     public function testSignalHandlerBadSignal(): void
     {
         $sd = new MockSoftDaemon($this->createMockExecutable());
-        $this->expectWarning();
-        $this->expectWarningMessage('Eclipxe\SoftDaemon\SoftDaemon::signalHandler(-128) do nothing');
-        $sd->exposeSignalHandler(-128);
+
+        error_clear_last();
+        @$sd->exposeSignalHandler(-128);
+        $error = error_get_last();
+
+        $this->assertSame(E_USER_WARNING, intval($error['type'] ?? 0));
+        $this->assertSame('Eclipxe\SoftDaemon\SoftDaemon::signalHandler(-128) do nothing', strval($error['message'] ?? ''));
     }
 
     public function testRun(): void
