@@ -12,6 +12,8 @@ In summary, [SemVer](https://semver.org/) can be viewed as `[ Breaking ].[ Featu
 
 ## Maintenance 2023-02-07
 
+- Refactor test because method `expectWarning()` has been deprecated.
+
 ## Version 2.0.1
 
 Extract `SoftDaemon::mainloop` read to a protected method `SoftDaemon::continueOnMainLoop()`.
