@@ -13,6 +13,7 @@ In summary, [SemVer](https://semver.org/) can be viewed as `[ Breaking ].[ Featu
 ## Maintenance 2023-02-07
 
 - Refactor test because method `expectWarning()` has been deprecated.
+- Remove `/tests/_files` from GitHub language analysis.
 
 ## Version 2.0.1
 
