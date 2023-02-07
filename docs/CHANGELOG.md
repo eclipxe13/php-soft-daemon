@@ -10,6 +10,8 @@ In summary, [SemVer](https://semver.org/) can be viewed as `[ Breaking ].[ Featu
 
 **Version `0.x.x` doesn't have to apply any of the SemVer rules**
 
+## Maintenance 2023-02-07
+
 ## Version 2.0.1
 
 Extract `SoftDaemon::mainloop` read to a protected method `SoftDaemon::continueOnMainLoop()`.
@@ -25,7 +27,7 @@ Minor changes:
   - Replace deprecated `echo ::set-output` instruction.
   - Add PHP 8.2 to compatibility matrix.
   - Remove `composer` where it is not required.
-Set up `filter.dependency_paths` setting Scrutinizer-CI.
+- Set up `filter.dependency_paths` setting Scrutinizer-CI.
 
 The following are changes made previously but not released.
 
