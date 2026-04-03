@@ -7,6 +7,9 @@ build:
   dependencies: { override: true }
   nodes:
     analysis: # see https://scrutinizer-ci.com/docs/tools/php/php-scrutinizer/
+      environment:
+          php:
+            version: 8.2 # Use a standard version already in the image
       project_setup: { override: true }
       tests: { override: true }
 
