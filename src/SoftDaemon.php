@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Eclipxe\SoftDaemon;
 
-use Eclipxe\SoftDaemon\Internal\PcntlSignals;
+use Eclipxe\SoftDaemon\PcntlSignals\PhpPcntlSignals;
 use Eclipxe\SoftDaemon\Sequencers\Fixed as FixedSequencer;
 
 class SoftDaemon
@@ -34,7 +34,7 @@ class SoftDaemon
     /** @var bool flag to control main loop */
     protected bool $mainloop = false;
 
-    /** @var PcntlSignals Native php functions (isolated for testing) */
+    /** @var PcntlSignals Native php functions (isolated) */
     protected PcntlSignals $pcntlsignals;
 
     /** @var list<int> Set of signals to block and wait for */
@@ -56,7 +56,7 @@ class SoftDaemon
         $this->sequencer = $sequencer ?? new FixedSequencer(1);
         $this->setMaxWait($maxwait);
         $this->setMinWait($minwait);
-        $this->pcntlsignals = new PcntlSignals(...$this->signals);
+        $this->pcntlsignals = new PhpPcntlSignals(...$this->signals);
     }
 
     /**

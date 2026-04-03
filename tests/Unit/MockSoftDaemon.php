@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Eclipxe\SoftDaemon\Tests\Unit;
 
 use Eclipxe\SoftDaemon\Executable;
-use Eclipxe\SoftDaemon\Internal\PcntlSignals;
+use Eclipxe\SoftDaemon\PcntlSignals;
 use Eclipxe\SoftDaemon\Sequencer;
 use Eclipxe\SoftDaemon\SoftDaemon;
 

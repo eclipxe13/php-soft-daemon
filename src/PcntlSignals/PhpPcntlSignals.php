@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Eclipxe\SoftDaemon\Internal;
+namespace Eclipxe\SoftDaemon\PcntlSignals;
+
+use Eclipxe\SoftDaemon\PcntlSignals;
 
 /**
  * Wrapper class to pcntl used by SoftDaemon
  * Do not put any logic on this class, it is only used to make system calls
- * @internal
  * @codeCoverageIgnore
  */
-class PcntlSignals
+final class PhpPcntlSignals implements PcntlSignals
 {
     /** @var list<int> */
     protected array $signals;
