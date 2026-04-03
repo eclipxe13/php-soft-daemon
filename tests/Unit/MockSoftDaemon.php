@@ -21,12 +21,12 @@ class MockSoftDaemon extends SoftDaemon
     public function __construct(Executable $executable)
     {
         parent::__construct($executable);
-        $this->setPcntlSignals(new MockPcntlSignals(...$this->signals));
+        $this->setPcntlSignals(new MockPcntlSignals(...static::SIGNALS));
     }
 
     public function setPcntlSignals(PcntlSignals $pcntlSignals): void
     {
-        $this->pcntlsignals = $pcntlSignals;
+        $this->pcntlSignals = $pcntlSignals;
     }
 
     public function exposeWaitTime(int $seconds): int
@@ -36,7 +36,7 @@ class MockSoftDaemon extends SoftDaemon
 
     public function setErrorCounter(int $counter): void
     {
-        $this->errorcount = $counter;
+        $this->errorCount = $counter;
     }
 
     public function exposeSignalHandler(int $signo): void
@@ -65,6 +65,6 @@ class MockSoftDaemon extends SoftDaemon
 
     public function exposePcntlSignals(): PcntlSignals
     {
-        return $this->pcntlsignals;
+        return $this->pcntlSignals;
     }
 }
