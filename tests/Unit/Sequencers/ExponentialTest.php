@@ -6,9 +6,10 @@ namespace Eclipxe\SoftDaemon\Tests\Unit\Sequencers;
 
 use Eclipxe\SoftDaemon\Sequencer;
 use Eclipxe\SoftDaemon\Sequencers\Exponential;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class ExponentialTest extends TestCase
+final class ExponentialTest extends TestCase
 {
     public function testConstructor(): void
     {
@@ -27,7 +28,7 @@ class ExponentialTest extends TestCase
     }
 
     /** @return array<array{int, int[]}> */
-    public function providerCalculate(): array
+    public static function providerCalculate(): array
     {
         return [
             [2, [0, 1, 3, 7, 15, 31]],
@@ -36,10 +37,8 @@ class ExponentialTest extends TestCase
         ];
     }
 
-    /**
-     * @param array<int, int> $values
-     * @dataProvider providerCalculate
-     */
+    /** @param array<int, int> $values */
+    #[DataProvider('providerCalculate')]
     public function testCalculate(int $base, array $values): void
     {
         $sequencer = new Exponential($base);

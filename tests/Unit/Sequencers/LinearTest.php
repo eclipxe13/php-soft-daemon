@@ -8,7 +8,7 @@ use Eclipxe\SoftDaemon\Sequencer;
 use Eclipxe\SoftDaemon\Sequencers\Linear;
 use PHPUnit\Framework\TestCase;
 
-class LinearTest extends TestCase
+final class LinearTest extends TestCase
 {
     public function testConstructor(): void
     {

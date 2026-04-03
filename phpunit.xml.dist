@@ -1,22 +1,21 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-    cacheResultFile="build/phpunit.result.cache"
-    colors="true"
+    cacheDirectory="build/phpunit"
     bootstrap="tests/bootstrap.php"
-    defaultTestSuite="default">
+    defaultTestSuite="default"
+    colors="true"
+    displayDetailsOnAllIssues="true"
+    failOnAllIssues="true"
+>
     <testsuites>
         <testsuite name="default">
             <directory>tests</directory>
-            <exclude>tests/Integration</exclude>
-        </testsuite>
-        <testsuite name="integration">
-            <directory>tests/Integration</directory>
         </testsuite>
     </testsuites>
-    <coverage>
+    <source>
         <include>
-            <directory suffix=".php">./src/</directory>
+            <directory>src</directory>
         </include>
-    </coverage>
+    </source>
 </phpunit>

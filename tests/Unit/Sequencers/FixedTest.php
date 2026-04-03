@@ -6,9 +6,10 @@ namespace Eclipxe\SoftDaemon\Tests\Unit\Sequencers;
 
 use Eclipxe\SoftDaemon\Sequencer;
 use Eclipxe\SoftDaemon\Sequencers\Fixed;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class FixedTest extends TestCase
+final class FixedTest extends TestCase
 {
     public function testConstructor(): void
     {
@@ -17,11 +18,8 @@ class FixedTest extends TestCase
         $this->assertSame(1, $sequencer->getSeconds(), 'Default seconds must be 1');
     }
 
-    /**
-     * @noinspection PhpPluralMixedCanBeReplacedWithArrayInspection
-     * @return array<mixed>
-     */
-    public function providerConstructorSeconds(): array
+    /** @return array<array{int, int}> */
+    public static function providerConstructorSeconds(): array
     {
         return [
             [-5, 0],
@@ -31,9 +29,7 @@ class FixedTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider providerConstructorSeconds
-     */
+    #[DataProvider('providerConstructorSeconds')]
     public function testConstructorSeconds(int $value, int $expected): void
     {
         $sequencer = new Fixed($value);

@@ -7,7 +7,7 @@ namespace Eclipxe\SoftDaemon\Tests\Unit;
 use Eclipxe\SoftDaemon\SoftDaemon;
 use PHPUnit\Framework\TestCase;
 
-class SoftDaemonTest extends TestCase
+final class SoftDaemonTest extends TestCase
 {
     public function createMockExecutable(): MockExecutable
     {
@@ -193,8 +193,8 @@ class SoftDaemonTest extends TestCase
         /** @var MockPcntlSignals $pcntlSignals */
         $pcntlSignals = $sd->exposePcntlSignals();
         $sd->run();
-        $this->assertEquals($msg_sd, $sd->messages, 'Execution messages at SoftDaemon does not match');
-        $this->assertEquals($msg_ex, $executable->messages, 'Execution messages at Executable does not match');
+        $this->assertSame($msg_sd, $sd->messages, 'Execution messages at SoftDaemon does not match');
+        $this->assertSame($msg_ex, $executable->messages, 'Execution messages at Executable does not match');
         $this->assertEquals($msg_pc, $pcntlSignals->messages, 'Execution messages at PcntlSignals does not match');
     }
 }

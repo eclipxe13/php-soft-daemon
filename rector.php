@@ -12,8 +12,9 @@ return RectorConfig::configure()
     ])
     // uncomment to reach your current PHP version
     ->withPhpSets(php82: true)
-    ->withPreparedSets(typeDeclarations: true, codeQuality: true, deadCode: true)
+    ->withPreparedSets(typeDeclarations: true, codeQuality: true, deadCode: true, phpunitCodeQuality: true)
     ->withSkip([
         Rector\CodeQuality\Rector\Assign\CombinedAssignRector::class,
+        Rector\PHPUnit\CodeQuality\Rector\Class_\YieldDataProviderRector::class,
     ])
 ;
