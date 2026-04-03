@@ -93,9 +93,11 @@ Before you can run these, be sure to `composer install` or `composer update`.
 
 ```shell
 # using composer
+phive install composer-normalize php-cs-fixer phpcs phpcbf phpstan infection
 composer dev:build
 
 # or using tools individually
+tools/composer-normalize --dry-run
 tools/phpcs -sp
 tools/php-cs-fixer fix -v --dry-run
 vendor/bin/phpunit --testdox
