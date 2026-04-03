@@ -8,11 +8,10 @@ use Eclipxe\SoftDaemon\Executable;
 
 class ExampleExecutable implements Executable
 {
-    /** @var int */
-    protected $counter = 0;
+    protected int $counter = 0;
 
     /** @var array<int, bool> */
-    protected $returns;
+    protected array $returns;
 
     /** @param array<int, bool> $returns */
     public function __construct(array $returns)
@@ -30,7 +29,7 @@ class ExampleExecutable implements Executable
 
     public function runOnce(): bool
     {
-        $return = array_key_exists($this->counter, $this->returns) ? $this->returns[$this->counter] : false;
+        $return = ($this->returns[$this->counter] ?? false);
         echo "Try to run $this->counter time: ", ($return) ? 'TRUE' : 'FALSE', "\n";
         $this->counter = $this->counter + 1;
         return $return;

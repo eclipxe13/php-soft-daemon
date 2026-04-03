@@ -8,14 +8,13 @@ use Eclipxe\SoftDaemon\Internal\PcntlSignals;
 
 class MockPcntlSignals extends PcntlSignals
 {
-    /** @var string[] */
-    public $messages = [];
+    /** @var list<string> */
+    public array $messages = [];
 
-    /** @var int[] */
-    public $returnSignals = [0, 0, 0, SIGHUP, 0, SIGUSR1, SIGUSR2, SIGTERM];
+    /** @var list<int> */
+    public array $returnSignals = [0, 0, 0, SIGHUP, 0, SIGUSR1, SIGUSR2, SIGTERM];
 
-    /** @var int */
-    public $waitIterator = 0;
+    public int $waitIterator = 0;
 
     public function addMessage(string $message): void
     {

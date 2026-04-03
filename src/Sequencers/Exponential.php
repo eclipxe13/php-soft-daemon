@@ -13,8 +13,7 @@ class Exponential implements Sequencer
 {
     public const MIN_BASE = 2;
 
-    /** @var int */
-    protected $base;
+    protected int $base;
 
     public function __construct(int $base = self::MIN_BASE)
     {

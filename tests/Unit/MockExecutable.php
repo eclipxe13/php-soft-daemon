@@ -8,14 +8,13 @@ use Eclipxe\SoftDaemon\Executable;
 
 class MockExecutable implements Executable
 {
-    /** @var string[] */
-    public $messages = [];
+    /** @var list<string> */
+    public array $messages = [];
 
-    /** @var int */
-    public $time = 0;
+    public int $time = 0;
 
-    /** @var bool[] */
-    public $runValues = [];
+    /** @var list<bool> */
+    public array $runValues = [];
 
     public function addMessage(string $message): void
     {

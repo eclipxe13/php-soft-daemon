@@ -74,7 +74,7 @@ class SoftDaemonTest extends TestCase
     public function testErrorCounterAfterRun(): void
     {
         // prepare to run 8 times
-        $pcntlSignals = new MockPcntlSignals([SIGTERM]);
+        $pcntlSignals = new MockPcntlSignals(SIGTERM);
         $pcntlSignals->returnSignals = [SIGTERM, 0, 0, 0, SIGTERM, 0, 0, SIGTERM];
         $executable = $this->createMockExecutable();
         $executable->runValues = [

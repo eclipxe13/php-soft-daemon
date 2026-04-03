@@ -12,24 +12,17 @@ namespace Eclipxe\SoftDaemon\Internal;
  */
 class PcntlSignals
 {
-    /** @var int[] */
-    protected $signals;
+    /** @var list<int> */
+    protected array $signals;
 
-    /**
-     * PcntlSignals constructor.
-     *
-     * @param int[] $signals
-     */
-    public function __construct(array $signals)
+    public function __construct(int ...$signals)
     {
-        $this->signals = $signals;
+        $this->signals = array_values($signals);
     }
 
     /**
      * block signals using pcntl_sigprocmask
      * This is not covered on test because it creates a php system call
-     *
-     * @return bool
      */
     public function block(): bool
     {
@@ -39,8 +32,6 @@ class PcntlSignals
     /**
      * unblock signals using pcntl_sigprocmask
      * This is not covered on test because it creates a php system call
-     *
-     * @return bool
      */
     public function unblock(): bool
     {
@@ -52,7 +43,6 @@ class PcntlSignals
      * This is not covered on test because it creates a php system call
      *
      * @param int $seconds Numbers of seconds to wait
-     * @return int
      */
     public function wait(int $seconds): int
     {

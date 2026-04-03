@@ -37,7 +37,6 @@ class ExponentialTest extends TestCase
     }
 
     /**
-     * @param int $base
      * @param array<int, int> $values
      * @dataProvider providerCalculate
      */

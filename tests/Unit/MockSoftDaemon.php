@@ -11,18 +11,22 @@ use Eclipxe\SoftDaemon\SoftDaemon;
 
 class MockSoftDaemon extends SoftDaemon
 {
-    /** @var string[] */
-    public $messages = [];
+    /** @var list<string> */
+    public array $messages = [];
 
     public function addMessage(string $message): void
     {
         $this->messages[] = $message;
     }
 
-    public function __construct(Executable $executable, ?Sequencer $sequencer = null, $maxwait = self::DEFAULT_MAXWAIT, $minwait = self::DEFAULT_MINWAIT)
-    {
+    public function __construct(
+        Executable $executable,
+        ?Sequencer $sequencer = null,
+        int $maxwait = self::DEFAULT_MAXWAIT,
+        int $minwait = self::DEFAULT_MINWAIT
+    ) {
         parent::__construct($executable, $sequencer, $maxwait, $minwait);
-        $this->setPcntlSignals(new MockPcntlSignals($this->signals));
+        $this->setPcntlSignals(new MockPcntlSignals(...$this->signals));
     }
 
     public function setPcntlSignals(PcntlSignals $pcntlSignals): void

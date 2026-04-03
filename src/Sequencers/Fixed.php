@@ -11,8 +11,7 @@ use Eclipxe\SoftDaemon\Sequencer;
  */
 class Fixed implements Sequencer
 {
-    /** @var int */
-    private $seconds;
+    private int $seconds;
 
     public function __construct(int $seconds = 1)
     {
