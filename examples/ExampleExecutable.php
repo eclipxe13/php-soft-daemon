@@ -10,13 +10,9 @@ class ExampleExecutable implements Executable
 {
     protected int $counter = 0;
 
-    /** @var array<int, bool> */
-    protected array $returns;
-
     /** @param array<int, bool> $returns */
-    public function __construct(array $returns)
+    public function __construct(protected array $returns)
     {
-        $this->returns = $returns;
     }
 
     public function signalHandler(int $signo): void

@@ -16,7 +16,7 @@
         "issues": "https://github.com/eclipxe13/php-soft-daemon/issues"
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "ext-pcntl": "*"
     },
     "require-dev": {
