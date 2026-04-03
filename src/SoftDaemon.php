@@ -15,8 +15,6 @@ class SoftDaemon
     /** minimum wait in seconds (no wait) */
     public const DEFAULT_MINWAIT = 0;
 
-    protected Sequencer $sequencer;
-
     /** @var int minimal wait */
     protected int $minwait;
 
@@ -40,17 +38,16 @@ class SoftDaemon
 
     /**
      * @param Executable $executable Executable object
-     * @param Sequencer|null $sequencer Sequencer object If null then a FixedSequencer(1) will be used
+     * @param Sequencer $sequencer Sequencer object If null then a FixedSequencer(1) will be used
      * @param int $maxwait Maximum seconds to wait before call again the executable object (min: 1)
      * @param int $minwait Minimum seconds to wait before call again the executable object (min: 0)
      */
     public function __construct(
         protected Executable $executable,
-        ?Sequencer $sequencer = null,
+        protected Sequencer $sequencer = new FixedSequencer(1),
         int $maxwait = self::DEFAULT_MAXWAIT,
         int $minwait = self::DEFAULT_MINWAIT
     ) {
-        $this->sequencer = $sequencer ?? new FixedSequencer(1);
         $this->setMaxWait($maxwait);
         $this->setMinWait($minwait);
         $this->pcntlsignals = new PhpPcntlSignals(...$this->signals);

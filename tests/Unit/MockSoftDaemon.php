@@ -6,7 +6,6 @@ namespace Eclipxe\SoftDaemon\Tests\Unit;
 
 use Eclipxe\SoftDaemon\Executable;
 use Eclipxe\SoftDaemon\PcntlSignals;
-use Eclipxe\SoftDaemon\Sequencer;
 use Eclipxe\SoftDaemon\SoftDaemon;
 
 class MockSoftDaemon extends SoftDaemon
@@ -19,13 +18,9 @@ class MockSoftDaemon extends SoftDaemon
         $this->messages[] = $message;
     }
 
-    public function __construct(
-        Executable $executable,
-        ?Sequencer $sequencer = null,
-        int $maxwait = self::DEFAULT_MAXWAIT,
-        int $minwait = self::DEFAULT_MINWAIT
-    ) {
-        parent::__construct($executable, $sequencer, $maxwait, $minwait);
+    public function __construct(Executable $executable)
+    {
+        parent::__construct($executable);
         $this->setPcntlSignals(new MockPcntlSignals(...$this->signals));
     }
 
