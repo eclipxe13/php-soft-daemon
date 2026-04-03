@@ -46,7 +46,7 @@ class SoftDaemon
         protected Executable $executable,
         protected Sequencer $sequencer = new FixedSequencer(1),
         int $maxwait = self::DEFAULT_MAXWAIT,
-        int $minwait = self::DEFAULT_MINWAIT
+        int $minwait = self::DEFAULT_MINWAIT,
     ) {
         $this->setMaxWait($maxwait);
         $this->setMinWait($minwait);
