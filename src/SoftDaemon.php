@@ -226,7 +226,7 @@ class SoftDaemon
         } else {
             // If the signal is not handled create an E_USER_WARNING
             // If this happends then this function is not implementing all the signals
-            trigger_error(__CLASS__ . "::signalHandler($signo) do nothing", E_USER_WARNING);
+            trigger_error(self::class . "::signalHandler($signo) do nothing", E_USER_WARNING);
         }
     }
 }
