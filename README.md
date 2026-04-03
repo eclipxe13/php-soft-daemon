@@ -19,7 +19,7 @@ Do not reinvent the wheel, if cron jobs are suitable to you then use them.
 
 ## How it runs
 
-You have to create an instance of `SoftDaemon`, it requires minimum an `Executable` object that implements `SoftDaemon\Executable` interface 
+You have to create an instance of `SoftDaemon`, it requires minimum an `Executable` object that implements `SoftDaemon\Executable` interface.
 
 The `SoftDaemon\Executable` interface requires that you create two methods:
 
@@ -34,12 +34,12 @@ At the end on every iteration the loop will wait.
 
 ### Signals used
 
-These signals are catched by SoftDaemon. All signals pass to `Executable::signalHandler($signo)` before `SoftDaemon do its own processing.
+These signals are catched by SoftDaemon. All signals pass to `Executable::signalHandler($signo)` before `SoftDaemon` do its own processing.
 
-- *SIGHUP*: Reset the error counter to zero. Method: `SoftDaemon::resetErrorCounter()`
-- *SIGUSR1*: Pause iterations. Method: `SoftDaemon::setPause(true)`
-- *SIGUSR2*: Unpause iterations. Method: `SoftDaemon::setPause(false)`
-- *SIGTERM*, *SIGINT*, *SIGQUIT*: Terminate the iterations. Method: `SoftDaemon::terminate()`
+- *SIGHUP*: Reset the error counter to zero. Method: `SoftDaemon::resetErrorCounter()`.
+- *SIGUSR1*: Pause iterations. Method: `SoftDaemon::setPause(true)`.
+- *SIGUSR2*: Unpause iterations. Method: `SoftDaemon::setPause(false)`.
+- *SIGTERM*, *SIGINT*, *SIGQUIT*: Terminate the iterations. Method: `SoftDaemon::terminate()`.
 
 ## How SoftDaemon knows how many seconds will wait
 
@@ -51,17 +51,17 @@ If **not on pause** then it will use the counter of errors and request the seque
 
 The result of `Executable::runOnce(): bool` determines the number of errors. It is reset to zero when `runOnce()` returns `true`. It is increased by 1 when `runOnce()` returns `false`.
 
-Anyhow, the number of seconds will be bounded to `MinWait` and `MaxWait` properties.
+Anyhow, the number of seconds will be bounded to `minWait` and `maxWait` properties.
 
 ## About sequencers
 
-A sequencer is an objects that implements `SoftDaemon\Sequencer`. Its purpose is to receive the number of errors and return a quantity of seconds to wait. There are some predefined Sequencers already defined in the namespace `SoftDaemon\Sequencer`:
+A sequencer is an object that implements `SoftDaemon\Sequencer`. Its purpose is to receive the number of errors and return a quantity of seconds to wait. There are some predefined *Sequencers* already defined in the namespace `SoftDaemon\Sequencers`:
 
 - *Fixed*: It always returns the same quantity of seconds.
 - *Linear*: It returns the quantity of seconds as the count of errors `(0 -> 0, 1 -> 1, 2 -> 2, ...)`.
 - *Exponential*: It returns the quantity of seconds as the count of errors to an exponential minus 1, if the base is 2 then it will return the following numbers: `(0 -> 0, 1 -> 1, 2 -> 3, 3 -> 7, 4 -> 15, ...)`.
 
-You can create a sequencer with your own rules. The `MinWait` and `MaxWait` limit the boundaries of seconds returned by the sequencer.
+You can create a sequencer with your own rules. The `minWait` and `maxWait` limit the boundaries of seconds returned by the sequencer.
 
 ## PHP Support
 
