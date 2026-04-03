@@ -1,9 +1,9 @@
 name: build
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   schedule:
     - cron: '0 16 * * 0' # sunday 16:00
 
@@ -151,8 +151,7 @@ jobs:
       - name: Install project dependencies
         run: composer upgrade --no-interaction --no-progress --prefer-dist
       - name: Mutation testing (infection)
-        run: |
-          infection --no-progress --no-interaction --show-mutations --logger-github
+        run: infection --no-progress --no-interaction --show-mutations --logger-github
 
   scrutinizer:
     name: Create and upload code coverage to Scrutinizer-CI
