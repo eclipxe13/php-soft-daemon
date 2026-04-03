@@ -48,7 +48,7 @@ class SoftDaemon
      * @param int $maxwait Maximum seconds to wait before call again the executable object (min: 1)
      * @param int $minwait Minimum seconds to wait before call again the executable object (min: 0)
      */
-    public function __construct(Executable $executable, Sequencer $sequencer = null, int $maxwait = self::DEFAULT_MAXWAIT, int $minwait = self::DEFAULT_MINWAIT)
+    public function __construct(Executable $executable, ?Sequencer $sequencer = null, int $maxwait = self::DEFAULT_MAXWAIT, int $minwait = self::DEFAULT_MINWAIT)
     {
         $this->executable = $executable;
         if (null === $sequencer) {

@@ -19,7 +19,7 @@ class MockSoftDaemon extends SoftDaemon
         $this->messages[] = $message;
     }
 
-    public function __construct(Executable $executable, Sequencer $sequencer = null, $maxwait = self::DEFAULT_MAXWAIT, $minwait = self::DEFAULT_MINWAIT)
+    public function __construct(Executable $executable, ?Sequencer $sequencer = null, $maxwait = self::DEFAULT_MAXWAIT, $minwait = self::DEFAULT_MINWAIT)
     {
         parent::__construct($executable, $sequencer, $maxwait, $minwait);
         $this->setPcntlSignals(new MockPcntlSignals($this->signals));
