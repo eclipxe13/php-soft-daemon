@@ -5,29 +5,28 @@ declare(strict_types=1);
 namespace Eclipxe\SoftDaemon\Tests\Unit;
 
 use Eclipxe\SoftDaemon\Executable;
-use Eclipxe\SoftDaemon\Internal\PcntlSignals;
-use Eclipxe\SoftDaemon\Sequencer;
+use Eclipxe\SoftDaemon\PcntlSignals;
 use Eclipxe\SoftDaemon\SoftDaemon;
 
 class MockSoftDaemon extends SoftDaemon
 {
-    /** @var string[] */
-    public $messages = [];
+    /** @var list<string> */
+    public array $messages = [];
 
     public function addMessage(string $message): void
     {
         $this->messages[] = $message;
     }
 
-    public function __construct(Executable $executable, Sequencer $sequencer = null, $maxwait = self::DEFAULT_MAXWAIT, $minwait = self::DEFAULT_MINWAIT)
+    public function __construct(Executable $executable)
     {
-        parent::__construct($executable, $sequencer, $maxwait, $minwait);
-        $this->setPcntlSignals(new MockPcntlSignals($this->signals));
+        parent::__construct($executable);
+        $this->setPcntlSignals(new MockPcntlSignals(...static::SIGNALS));
     }
 
     public function setPcntlSignals(PcntlSignals $pcntlSignals): void
     {
-        $this->pcntlsignals = $pcntlSignals;
+        $this->pcntlSignals = $pcntlSignals;
     }
 
     public function exposeWaitTime(int $seconds): int
@@ -37,7 +36,7 @@ class MockSoftDaemon extends SoftDaemon
 
     public function setErrorCounter(int $counter): void
     {
-        $this->errorcount = $counter;
+        $this->errorCount = $counter;
     }
 
     public function exposeSignalHandler(int $signo): void
@@ -66,6 +65,6 @@ class MockSoftDaemon extends SoftDaemon
 
     public function exposePcntlSignals(): PcntlSignals
     {
-        return $this->pcntlsignals;
+        return $this->pcntlSignals;
     }
 }

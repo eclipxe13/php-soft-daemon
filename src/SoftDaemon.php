@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Eclipxe\SoftDaemon;
 
-use Eclipxe\SoftDaemon\Internal\PcntlSignals;
+use Eclipxe\SoftDaemon\PcntlSignals\PhpPcntlSignals;
 use Eclipxe\SoftDaemon\Sequencers\Fixed as FixedSequencer;
 
 class SoftDaemon
@@ -15,89 +15,76 @@ class SoftDaemon
     /** minimum wait in seconds (no wait) */
     public const DEFAULT_MINWAIT = 0;
 
-    /** @var Executable **/
-    protected $executable;
-
-    /** @var Sequencer **/
-    protected $sequencer;
-
     /** @var int minimal wait */
-    protected $minwait;
+    protected int $minWait;
 
     /** @var int maximum wait */
-    protected $maxwait;
+    protected int $maxWait;
 
     /** @var int count of consecutive times the executable return error */
-    protected $errorcount = 0;
+    protected int $errorCount = 0;
 
     /** @var bool pause state of the object */
-    protected $pause = false;
+    protected bool $pause = false;
 
     /** @var bool flag to control main loop */
-    protected $mainloop = false;
+    protected bool $mainLoop = false;
 
-    /** @var PcntlSignals Native php functions (isolated for testing) */
-    protected $pcntlsignals;
+    /** @var PcntlSignals Native php functions (isolated) */
+    protected PcntlSignals $pcntlSignals;
 
-    /** @var int[] Set of signals to block and wait for */
-    protected $signals = [SIGHUP, SIGTERM, SIGINT, SIGQUIT, SIGUSR1, SIGUSR2];
+    /** @var list<int> Set of signals to block and wait for */
+    protected const SIGNALS = [SIGHUP, SIGTERM, SIGINT, SIGQUIT, SIGUSR1, SIGUSR2];
 
     /**
      * @param Executable $executable Executable object
-     * @param Sequencer|null $sequencer Sequencer object If null then a FixedSequencer(1) will be used
-     * @param int $maxwait Maximum seconds to wait before call again the executable object (min: 1)
-     * @param int $minwait Minimum seconds to wait before call again the executable object (min: 0)
+     * @param Sequencer $sequencer Sequencer object If null then a FixedSequencer(1) will be used
+     * @param int $maxWait Maximum seconds to wait before call again the executable object (min: 1)
+     * @param int $minWait Minimum seconds to wait before call again the executable object (min: 0)
      */
-    public function __construct(Executable $executable, Sequencer $sequencer = null, int $maxwait = self::DEFAULT_MAXWAIT, int $minwait = self::DEFAULT_MINWAIT)
-    {
-        $this->executable = $executable;
-        if (null === $sequencer) {
-            $sequencer = new FixedSequencer(1);
-        }
-        $this->sequencer = $sequencer;
-        $this->setMaxWait($maxwait);
-        $this->setMinWait($minwait);
-        $this->pcntlsignals = new PcntlSignals($this->signals);
+    public function __construct(
+        protected Executable $executable,
+        protected Sequencer $sequencer = new FixedSequencer(1),
+        int $maxWait = self::DEFAULT_MAXWAIT,
+        int $minWait = self::DEFAULT_MINWAIT,
+    ) {
+        $this->setMaxWait($maxWait);
+        $this->setMinWait($minWait);
+        $this->pcntlSignals = new PhpPcntlSignals(...static::SIGNALS);
     }
 
     /**
-     * Set the maxwait seconds, the SoftDaemon will not wait more than this quantity of seconds
-     * Any value lower than 1 is fixed to 1, if not numeric uses default self::DEFAULT_MAXWAIT
-     *
-     * @param int $maxwait
+     * Set the max wait seconds, the SoftDaemon will not wait more than this quantity of seconds
+     * Any value lower than 1 is fixed to 1
      */
-    public function setMaxWait(int $maxwait): void
+    public function setMaxWait(int $maxWait): void
     {
-        $this->maxwait = max(1, $maxwait);
+        $this->maxWait = max(1, $maxWait);
     }
 
     /**
-     * Get the maxwait seconds
-     * @return int
+     * Get the max wait seconds
      */
     public function getMaxWait(): int
     {
-        return $this->maxwait;
+        return $this->maxWait;
     }
 
     /**
-     * Set the minwait seconds, the SoftDaemon will not wait less than this quantity of seconds
-     * Any value lower than 0 is fixed to 0, if not numeric uses default 0
-     *
-     * @param int $minwait
+     * Set the min wait seconds, the SoftDaemon will not wait less than this quantity of seconds
+     * Any value lower than 0 is fixed to 0
      */
-    public function setMinWait(int $minwait): void
+    public function setMinWait(int $minWait): void
     {
-        $this->minwait = max(0, $minwait);
+        $this->minWait = max(0, $minWait);
     }
 
     /**
-     * Get the minwait seconds
-     * @return int $minwait
+     * Get the min wait seconds
      */
     public function getMinWait(): int
     {
-        return $this->minwait;
+        return $this->minWait;
     }
 
     /**
@@ -105,7 +92,7 @@ class SoftDaemon
      */
     public function resetErrorCounter(): void
     {
-        $this->errorcount = 0;
+        $this->errorCount = 0;
     }
 
     /**
@@ -113,33 +100,30 @@ class SoftDaemon
      */
     public function terminate(): void
     {
-        $this->mainloop = false;
+        $this->mainLoop = false;
     }
 
     /**
-     * Internally check if must continue on main loop
+     * Internally check if it must continue on main loop
      */
     protected function continueOnMainLoop(): bool
     {
-        return $this->mainloop;
+        return $this->mainLoop;
     }
 
     /**
      * Count of consecutive times the executable return error
      * This value can only be set to zero using resetErrorCounter
-     * @return int
      */
     public function getErrorCounter(): int
     {
-        return $this->errorcount;
+        return $this->errorCount;
     }
 
     /**
-     * Set the pause status, if on pause then main loop will only wait 1 second until another signal is received
-     * The executor is not called when the SoftDaemon is on pause
-     * The time to wait on pause is 1 second, but this is fixed to minwait and maxwait
-     *
-     * @param bool $pause
+     * Set the pause status, if on pause then main loop will only wait 1 second until another signal is received.
+     * The executor is not called when the SoftDaemon is on pause.
+     * The time to wait on pause is 1 second, but this is fixed to min wait and max wait.
      */
     public function setPause(bool $pause): void
     {
@@ -148,7 +132,6 @@ class SoftDaemon
 
     /**
      * Get the pause status
-     * @return bool
      */
     public function getPause(): bool
     {
@@ -156,14 +139,11 @@ class SoftDaemon
     }
 
     /**
-     * Fix the wait time to force minwait and maxwait
-     *
-     * @param int $seconds
-     * @return int
+     * Fix the wait time to force min wait and max wait
      */
     protected function waitTime(int $seconds): int
     {
-        return max($this->minwait, min($this->maxwait, $seconds));
+        return max($this->minWait, min($this->maxWait, $seconds));
     }
 
     /**
@@ -172,10 +152,10 @@ class SoftDaemon
     public function run(): void
     {
         // reset variables
-        $this->errorcount = 0;
-        $this->mainloop = true;
+        $this->errorCount = 0;
+        $this->mainLoop = true;
         // block signals
-        $this->pcntlsignals->block();
+        $this->pcntlSignals->block();
         // main loop
         while ($this->continueOnMainLoop()) {
             // get the time to wait based on pause or sequencer
@@ -185,30 +165,24 @@ class SoftDaemon
                 // get the process result
                 $result = $this->executable->runOnce();
                 // increase the error count based on result
-                if ($result) {
-                    $this->errorcount = 0;
-                } else {
-                    $this->errorcount = $this->errorcount + 1;
-                }
+                $this->errorCount = $result ? 0 : $this->errorCount + 1;
                 // calculate time to wait
-                $timetowait = $this->waitTime($this->sequencer->calculate($this->errorcount));
+                $timetowait = $this->waitTime($this->sequencer->calculate($this->errorCount));
             }
             // wait
-            $signo = $this->pcntlsignals->wait($timetowait);
+            $signo = $this->pcntlSignals->wait($timetowait);
             if ($signo > 0) {
                 $this->signalHandler($signo);
             }
         }
         // unblock signals
-        $this->pcntlsignals->unblock();
+        $this->pcntlSignals->unblock();
     }
 
     /**
      * Signal processor procedure:
      * 1 Send the signal to executor
      * 2 Process the signal received
-     *
-     * @param int $signo
      */
     protected function signalHandler(int $signo): void
     {
@@ -226,7 +200,7 @@ class SoftDaemon
         } else {
             // If the signal is not handled create an E_USER_WARNING
             // If this happends then this function is not implementing all the signals
-            trigger_error(__CLASS__ . "::signalHandler($signo) do nothing", E_USER_WARNING);
+            trigger_error(self::class . "::signalHandler($signo) do nothing", E_USER_WARNING);
         }
     }
 }

@@ -10,6 +10,37 @@ In summary, [SemVer](https://semver.org/) can be viewed as `[ Breaking ].[ Featu
 
 **Version `0.x.x` doesn't have to apply any of the SemVer rules**
 
+## Version 3.0.0
+
+Please, read the [Upgrade guide to version 3.x](UPGRADE_3.md) for relevant breaking changes.
+
+Major changes:
+
+- Drop compatibility for PHP 7.3, PHP 7.4, PHP 8.0 and PHP 8.1.
+- Add compatibility for PHP 8.4 and PHP 8.5.
+- Introduces interface `PcntlSignals`.
+- Rename `Internal\PcntlSignals` to `PcntlSignals\PhpPcntlSignals`, remove `@internal` and make it final.
+- Rename properties to use camel case.
+- Enforce PHP types.
+
+Minor changes:
+
+- Update license year to 2026.
+
+Development changes:
+
+- Add `composer-normalize` as a development tool.
+- Remove *Psalm* tool.
+- Update coding standards rules.
+- Set up scrutinizer to receive code coverage instead of creating it.
+- On GitHub workflows:
+  - Run jobs using PHP 8.5.
+  - Add PHP 8.4 and PHP 8.5 to `phpunit` job matrix.
+  - Rename matrix variable name `php-versions` to `php-version`.
+  - Introduce `scrutinizer` job to create the code coverage and upload it.
+  - Upgrade actions versions.
+- Update development tools.
+
 ## Maintenance 2023-02-07
 
 - Refactor test because method `expectWarning()` has been deprecated.

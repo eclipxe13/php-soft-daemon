@@ -4,18 +4,25 @@ declare(strict_types=1);
 
 namespace Eclipxe\SoftDaemon\Tests\Unit;
 
-use Eclipxe\SoftDaemon\Internal\PcntlSignals;
+use Eclipxe\SoftDaemon\PcntlSignals;
 
-class MockPcntlSignals extends PcntlSignals
+final class MockPcntlSignals implements PcntlSignals
 {
-    /** @var string[] */
-    public $messages = [];
+    /** @var list<int> */
+    protected array $signals;
 
-    /** @var int[] */
-    public $returnSignals = [0, 0, 0, SIGHUP, 0, SIGUSR1, SIGUSR2, SIGTERM];
+    /** @var list<string> */
+    public array $messages = [];
 
-    /** @var int */
-    public $waitIterator = 0;
+    /** @var list<int> */
+    public array $returnSignals = [0, 0, 0, SIGHUP, 0, SIGUSR1, SIGUSR2, SIGTERM];
+
+    public int $waitIterator = 0;
+
+    public function __construct(int ...$signals)
+    {
+        $this->signals = array_values($signals);
+    }
 
     public function addMessage(string $message): void
     {

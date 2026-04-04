@@ -7,7 +7,7 @@ namespace Eclipxe\SoftDaemon\Tests\Unit;
 use Eclipxe\SoftDaemon\SoftDaemon;
 use PHPUnit\Framework\TestCase;
 
-class SoftDaemonTest extends TestCase
+final class SoftDaemonTest extends TestCase
 {
     public function createMockExecutable(): MockExecutable
     {
@@ -17,8 +17,8 @@ class SoftDaemonTest extends TestCase
     public function testDefaultConstructor(): void
     {
         $sd = new SoftDaemon($this->createMockExecutable());
-        $this->assertSame(SoftDaemon::DEFAULT_MAXWAIT, $sd->getMaxWait(), 'default maxwait must be the same as constant');
-        $this->assertSame(SoftDaemon::DEFAULT_MINWAIT, $sd->getMinWait(), 'default minwait must be the same as constant');
+        $this->assertSame(SoftDaemon::DEFAULT_MAXWAIT, $sd->getMaxWait(), 'default max wait must be the same as constant');
+        $this->assertSame(SoftDaemon::DEFAULT_MINWAIT, $sd->getMinWait(), 'default min wait must be the same as constant');
         $this->assertFalse($sd->getPause(), 'default pause status must be false');
         $this->assertSame(0, $sd->getErrorCounter(), 'Must be no errors on SoftDaemon creation');
     }
@@ -57,9 +57,9 @@ class SoftDaemonTest extends TestCase
         $sd = new MockSoftDaemon($this->createMockExecutable());
         $sd->setMinWait(10);
         $sd->setMaxWait(100);
-        $this->assertSame(10, $sd->exposeWaitTime(1), 'wait time is not returning minwait');
-        $this->assertSame(100, $sd->exposeWaitTime(200), 'wait time is not returning maxwait');
-        $this->assertSame(50, $sd->exposeWaitTime(50), 'wait time is not value between minwait and maxwait');
+        $this->assertSame(10, $sd->exposeWaitTime(1), 'wait time is not returning min wait');
+        $this->assertSame(100, $sd->exposeWaitTime(200), 'wait time is not returning max wait');
+        $this->assertSame(50, $sd->exposeWaitTime(50), 'wait time is not value between min wait and max wait');
     }
 
     public function testGetErrorCounter(): void
@@ -74,7 +74,7 @@ class SoftDaemonTest extends TestCase
     public function testErrorCounterAfterRun(): void
     {
         // prepare to run 8 times
-        $pcntlSignals = new MockPcntlSignals([SIGTERM]);
+        $pcntlSignals = new MockPcntlSignals(SIGTERM);
         $pcntlSignals->returnSignals = [SIGTERM, 0, 0, 0, SIGTERM, 0, 0, SIGTERM];
         $executable = $this->createMockExecutable();
         $executable->runValues = [
@@ -193,8 +193,8 @@ class SoftDaemonTest extends TestCase
         /** @var MockPcntlSignals $pcntlSignals */
         $pcntlSignals = $sd->exposePcntlSignals();
         $sd->run();
-        $this->assertEquals($msg_sd, $sd->messages, 'Execution messages at SoftDaemon does not match');
-        $this->assertEquals($msg_ex, $executable->messages, 'Execution messages at Executable does not match');
+        $this->assertSame($msg_sd, $sd->messages, 'Execution messages at SoftDaemon does not match');
+        $this->assertSame($msg_ex, $executable->messages, 'Execution messages at Executable does not match');
         $this->assertEquals($msg_pc, $pcntlSignals->messages, 'Execution messages at PcntlSignals does not match');
     }
 }
